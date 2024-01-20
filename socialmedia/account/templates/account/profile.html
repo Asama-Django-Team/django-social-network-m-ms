@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2 class="text-center"> {{user.username}} </h2>
+
+    {% for post in posts %}
+
+    <p>
+       
+       <a href="{% url 'home:post_detail' post.id post.slug %}"> {{post.title}} </a>
+
+    </p><hr>
+
+   {% endfor %}
+
+
+{% endblock %}
