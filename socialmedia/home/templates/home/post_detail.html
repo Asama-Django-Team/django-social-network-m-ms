@@ -7,6 +7,15 @@
         <small> {{post.date_posted}} </small>
         <p> {{post.content}} </p>
         <small> Author: {{post.user}} </small>
+
+        {% if request.user.id == post.user.id %}
+        
+        <br>
+        <br>
+        <a href="{% url 'home:post_delete' post.id %}" class="btn btn-danger" >Delete</a>
+        <a href="{% url 'home:post_update' post.id %}" class="btn btn-warning" >Update</a>
+
+        {% endif %}
         
 
 {% endblock %}
