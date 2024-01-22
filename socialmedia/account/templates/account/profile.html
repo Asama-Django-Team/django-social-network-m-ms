@@ -3,6 +3,9 @@
 {% block content %}
 
     <h2 class="text-center"> {{user.username}} </h2>
+    
+    
+    <a href="{% url 'home:post_create' %}" class="btn btn-info"> Create </a>
 
     {% for post in posts %}
 
