@@ -17,5 +17,6 @@ class EmailBackend:
         try:
             user = User.objects.get(pk=user_id)
             return user
+        
         except user.DoesNotExist:
             return None
