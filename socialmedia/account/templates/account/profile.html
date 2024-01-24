@@ -3,6 +3,15 @@
 {% block content %}
 
     <h2 class="text-center"> {{user.username}} </h2>
+
+    {% if request.user.id != user.id and is_following %}
+        <a href="{% url 'account:user_unfollow' user.id %}" class="btn btn-primary"> Unfollow </a>
+    {% endif %}
+
+    {% if request.user.id != user.id and not is_following %}
+        <a href="{% url 'account:user_follow' user.id %}" class="btn btn-primary"> Follow </a>
+    {% endif %}
+   
     
     
     <a href="{% url 'home:post_create' %}" class="btn btn-info"> Create </a>

@@ -1,6 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
-# Create your models here.
+class Relation(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="followers")
+    to_user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="followings")
+    created = models.DateTimeField(auto_now_add=True)
 
 
