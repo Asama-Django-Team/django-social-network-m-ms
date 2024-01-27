@@ -12,9 +12,11 @@
         <a href="{% url 'account:user_follow' user.id %}" class="btn btn-primary"> Follow </a>
     {% endif %}
    
+    {% if request.user.id ==  user.id %}
+        <a href="{% url 'home:post_create' %}" class="btn btn-info"> Create </a>
+    {% endif %}
+
     
-    
-    <a href="{% url 'home:post_create' %}" class="btn btn-info"> Create </a>
 
     {% for post in posts %}
 

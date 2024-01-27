@@ -6,16 +6,43 @@
         <h1> {{post.title}} </h1>
         <small> {{post.date_posted}} </small>
         <p> {{post.content}} </p>
-        <small> Author: {{post.user}} </small>
+        
+        <small> 
+            Author: <a href="{% url 'account:user_profile' post.user.id %}"> {{post.user}} </a>
+             
+        </small>
 
         {% if request.user.id == post.user.id %}
         
         <br>
         <br>
-        <a href="{% url 'home:post_delete' post.id %}" class="btn btn-danger" >Delete</a>
-        <a href="{% url 'home:post_update' post.id %}" class="btn btn-warning" >Update</a>
+        <a href="{% url 'home:post_delete' post.id %}" class="btn btn-danger" > Delete </a>
+        <a href="{% url 'home:post_update' post.id %}" class="btn btn-warning" > Update </a>
 
         {% endif %}
+
+        <hr>
+
+        {% for comment in comments %}
+
+            <div class="card bg-dark text-white">
+
+                <p class="card-header">
+                    {{comment.user}} | {{comment.created | timesince}} ago
+                </p>
+
+                <p class="card-body">
+                    {{comment.body}}
+                </p>
+
+            </div>
+
+            {% empty %}
+                <p>
+                    No Comments Yet! Be the first to comment on this Post.
+                </p>
+
+        {% endfor %}
         
 
 {% endblock %}

@@ -21,7 +21,8 @@ class PostDetailView(View):
     def get(self, request, post_id, post_slug):
         post = Post.objects.get(pk=post_id, slug=post_slug)
         # user = User.objects.get(pk=post)
-        return render(request, "home/post_detail.html", {"post": post})
+        comments = post.pcomment.filter(is_reply=False)
+        return render(request, "home/post_detail.html", {"post": post, "comments": comments})
     
 class PostDeleteView(LoginRequiredMixin, View):
     def get(self, request, post_id):
