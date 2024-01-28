@@ -23,6 +23,27 @@
 
         <hr>
 
+
+        {% if request.user.is_authenticated %}
+
+            <form action="" method="post" novalidate>
+
+                {% csrf_token %}
+                {{form.as_p}}
+                <input type="submit" value="Send">
+
+            </form>
+
+        {% else %}
+            
+            <p class="alert alert-danger">
+                You Not Logged in So You Cant Comment On This Post.
+            </p>
+
+        {% endif %}
+
+
+
         {% for comment in comments %}
 
             <div class="card bg-dark text-white">
@@ -42,7 +63,17 @@
                     No Comments Yet! Be the first to comment on this Post.
                 </p>
 
+            {% for reply in comment.rcomment.all %}
+
+                <p class="bg-primary p-3 m-2">
+                    salam
+                </p>
+
+            {% endfor %}
+
         {% endfor %}
+
+        
         
 
 {% endblock %}
