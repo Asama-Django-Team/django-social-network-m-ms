@@ -3,7 +3,7 @@ from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from .forms import UserRegistrationForm, UserLoginForm
+from .forms import UserRegistrationForm, UserLoginForm, UserEditForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from home.models import Post
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
-from .models import Relation
+from .models import Relation, Profile
 # Create your views here.
 
 
@@ -85,15 +85,17 @@ class UserLogoutView(LoginRequiredMixin, View):
     
 
 class UserProfileView(LoginRequiredMixin, View):
+    
     def get(self, request, user_id):
         is_following = False
         user = User.objects.get(pk=user_id)
         posts = user.posts.all()
+        profile = Profile.objects.get(user=user)
         relation = Relation.objects.filter(from_user=request.user, to_user=user)
         if relation.exists():
             is_following = True
 
-        return render(request, "account/profile.html", {"user": user, "posts": posts, "is_following": is_following})
+        return render(request, "account/profile.html", {"user": user, "posts": posts, "is_following": is_following, "profile": profile})
 
 class CommunityView(LoginRequiredMixin, View):
     def get(self, request):
@@ -141,3 +143,21 @@ class UserUnfollowView(LoginRequiredMixin, View):
             messages.success(request, "You Not Follow This User")
 
         return redirect("account:user_profile", user.id)
+
+
+class EditProfileView(LoginRequiredMixin, View):
+    form_class = UserEditForm
+
+    def get(self, request):
+        edit_profile = self.form_class(instance=request.user.profile, initial={"email": request.user.email})
+        return render(request, "account/edit_profile.html", {"edit_profile": edit_profile})
+
+    def post(self, request):
+        form = self.form_class(request.POST, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            request.user.email = form.cleaned_data["email"]
+            request.user.save()
+            messages.success(request, "You Edited Profile Successfully", extra_tags="success")
+
+        return redirect("account:user_profile", request.user.id)

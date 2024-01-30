@@ -7,15 +7,19 @@ from .models import Post, Comment, Vote
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import PostCreateUpdateForm, CommentCreateForm, ReplyAddForm
+from .forms import PostCreateUpdateForm, CommentCreateForm, ReplyAddForm, SearchPostForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 class HomeView(View):
+    form = SearchPostForm
+
     def get(self, request):
         posts = Post.objects.all()
-        return render(request, "home/home.html", {"posts": posts})
+        if request.GET.get("search"):
+            posts = posts.filter(content__contains=request.GET["search"])
+        return render(request, "home/home.html", {"posts": posts, "form": self.form})
     
 
 class PostDetailView(View):

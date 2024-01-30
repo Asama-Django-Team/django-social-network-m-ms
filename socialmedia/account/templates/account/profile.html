@@ -4,6 +4,14 @@
 
     <h2 class="text-center"> {{user.username}} </h2>
 
+    <div class="text-center">
+
+        <small> Age: {{profile.age}} </small>
+        <p> Bio: {{profile.bio}} </p>
+
+    </div>
+
+
     {% if request.user.id != user.id and is_following %}
         <a href="{% url 'account:user_unfollow' user.id %}" class="btn btn-primary"> Unfollow </a>
     {% endif %}
@@ -14,6 +22,7 @@
    
     {% if request.user.id ==  user.id %}
         <a href="{% url 'home:post_create' %}" class="btn btn-info"> Create </a>
+        <a href="{% url 'account:user_edit_profile' %}" class="btn btn-info"> Edit </a>
     {% endif %}
 
     
